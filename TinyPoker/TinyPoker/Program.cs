@@ -15,8 +15,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://127.0.0.1:5173",
-                                             "https://tiny-poker.s3.amazonaws.com");
+                          policy.WithOrigins("https://localhost:44498",
+                                             "https://tiny-pocker.fun",
+                                             "https://tiny-poker.fun",
+                                             "https://www.tiny-poker.fun",
+                                             "http://tinypocker.us-east-1.elasticbeanstalk.com");
                       });
 });
 
