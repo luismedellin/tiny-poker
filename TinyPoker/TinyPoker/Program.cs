@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
                                              "https://tiny-pocker.fun",
                                              "https://tiny-poker.fun",
                                              "https://www.tiny-poker.fun",
+                                             "https://tinypocker.us-east-1.elasticbeanstalk.com/",
                                              "http://tinypocker.us-east-1.elasticbeanstalk.com");
                       });
 });
