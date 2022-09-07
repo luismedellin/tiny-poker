@@ -1,8 +1,24 @@
+using TinyPoker.Core.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddTransient<IRoomService, RoomService>();
+
+var MyAllowSpecificOrigins = "corsapp";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://127.0.0.1:5173",
+                                             "https://tiny-poker.s3.amazonaws.com");
+                      });
+});
 
 var app = builder.Build();
 
@@ -17,6 +33,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors(MyAllowSpecificOrigins);
 
 app.MapControllerRoute(
     name: "default",
