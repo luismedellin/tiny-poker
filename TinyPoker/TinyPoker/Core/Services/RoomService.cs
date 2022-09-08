@@ -34,7 +34,7 @@ namespace TinyPoker.Core.Services
         {
             var room = new Room()
             {
-                RoomId = new Guid().ToString(),
+                RoomId = Guid.NewGuid().ToString(),
                 Name = roomDto.Name,
                 Owner = roomDto.Owner,
                 IsActive = true,

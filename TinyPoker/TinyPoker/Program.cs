@@ -10,19 +10,23 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IRoomService, RoomService>();
 
 var MyAllowSpecificOrigins = "corsapp";
-builder.Services.AddCors(options =>
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: MyAllowSpecificOrigins,
+//                      policy =>
+//                      {
+//                          policy.WithOrigins("https://localhost:44498",
+//                                             "https://tiny-pocker.fun",
+//                                             "https://tiny-poker.fun",
+//                                             "https://www.tiny-poker.fun",
+//                                             "https://tinypocker.us-east-1.elasticbeanstalk.com/",
+//                                             "http://tinypocker.us-east-1.elasticbeanstalk.com");
+//                      });
+//});
+builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("https://localhost:44498",
-                                             "https://tiny-pocker.fun",
-                                             "https://tiny-poker.fun",
-                                             "https://www.tiny-poker.fun",
-                                             "https://tinypocker.us-east-1.elasticbeanstalk.com/",
-                                             "http://tinypocker.us-east-1.elasticbeanstalk.com");
-                      });
-});
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 var app = builder.Build();
 

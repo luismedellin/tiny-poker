@@ -21,11 +21,7 @@ namespace TinyPoker.Controllers
             var room = await roomService.GetRoom(roomId);
             if(room == null) return NotFound();
 
-            return Ok(new
-            {
-                room = room,
-                Date = DateTime.Now
-            });
+            return Ok(room);
         }
 
         [HttpPost]

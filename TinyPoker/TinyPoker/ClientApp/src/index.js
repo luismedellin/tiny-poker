@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
+import './index.scss';
 import { TinyPokerApp } from './TinyPokerApp';
 import reportWebVitals from './reportWebVitals';
 

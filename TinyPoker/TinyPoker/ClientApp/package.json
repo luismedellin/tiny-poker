@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
+    "formik": "^2.2.9",
     "http-proxy-middleware": "^0.19.1",
     "prop-types": "^15.8.1",
     "query-string": "^7.1.1",
@@ -17,7 +18,10 @@
     "rimraf": "^2.6.2",
     "sass": "^1.54.4",
     "sweetalert2": "^11.4.23",
-    "web-vitals": "^0.2.4"
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13",
+    "web-vitals": "^0.2.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
