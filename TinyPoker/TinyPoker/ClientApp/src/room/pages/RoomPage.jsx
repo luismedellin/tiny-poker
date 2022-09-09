@@ -59,7 +59,12 @@ const defaultCards = [
         value: "c",
         isActive: false
     },
-]
+];
+
+const users = [
+    {"userId":"75357383-a70c-4632-ba15-7700e89bfa85","name":"Luis"},
+    {"userId":"e6cc6bee-2ec8-47dd-ae4d-544fcb50d461","name":"Mary"}
+];
 
 export const RoomPage = () => {
     const navigate = useNavigate();
@@ -83,7 +88,7 @@ export const RoomPage = () => {
 
             setTimeout(()=> {
                 navigate(`/`);
-            }, 1000);
+            }, 5000);
         })
     }, [])
 
@@ -107,10 +112,12 @@ export const RoomPage = () => {
     if (!room.roomId) return <p>Loading...</p>
 
     return (
-        <main className="container">
+        <main className="container animate__animated animate__fadeIn">
             <div>
                 <h1>{room.name}</h1>
             </div>
+
+            <div className="d-flex">
             <div>
                 <h2>{currentUserHistory?.title}</h2>
                 <div className="poker-cards d-flex flex-wrap" disabled={!currentUserHistory}>
@@ -134,6 +141,25 @@ export const RoomPage = () => {
                         />
                 </div>
             </div>
+
+            <div className="card" style={{width: "20rem"}}>
+                <h5 className="card-header text-center bg-primary text-white">Users</h5>
+                <ul className="list-group list-group-flush">
+                    <li className="list-group-item">
+                        Players:
+                    </li>
+                    {
+                        users.map(user => (
+                            <li key={user.userId} className="list-group-item">
+                                {user.name} <span className="badge bg-primary rounded-pill mb-2">14</span>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            </div>
+
         </main>
     )
 }

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { v4 as uuidv4 } from 'uuid';
 import { useUserStore } from '../../hooks';
-import { JoinRoom } from '../../ui';
+import { JoinRoom } from '../../room';
 
 export const Welcome = () => {
   const { user, setUser } = useUserStore();

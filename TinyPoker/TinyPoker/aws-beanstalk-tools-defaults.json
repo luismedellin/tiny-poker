@@ -4,10 +4,10 @@
     "configuration" : "Debug",
     "framework"     : "net6.0",
     "self-contained" : false,
-    "application"    : "TinyPocker",
-    "environment"    : "Tinypocker-env",
+    "application"    : "Tiny-poker",
+    "environment"    : "Tinypoker-env",
     "enable-xray"    : false,
-    "enhanced-health-type" : "basic",
+    "enhanced-health-type" : "enhanced",
     "additional-options"   : "",
     "proxy-server"         : "nginx"
 }
