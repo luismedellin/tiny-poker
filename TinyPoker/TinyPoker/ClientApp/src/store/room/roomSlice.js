@@ -10,7 +10,9 @@ export const roomSlice = createSlice({
     reducers: {
         addRoom: (state, { payload }) => {
             state.room = payload;
-            console.log(payload);
+        },
+        setCurrentUserHistory: (state, { payload }) => {
+            state.currentUserHistory = payload;
         },
         setCounter: (state, /* action */ ) => {
             state.counter += 1;
@@ -20,4 +22,8 @@ export const roomSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { addRoom, setCounter } = roomSlice.actions;
+export const { 
+    addRoom,
+    setCurrentUserHistory,
+    setCounter 
+} = roomSlice.actions;

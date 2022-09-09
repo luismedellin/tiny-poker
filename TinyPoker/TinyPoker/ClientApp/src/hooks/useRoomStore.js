@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoom, setCounter } from '../store';
+import { addRoom, setCounter, setCurrentUserHistory } from '../store';
 import { tinyPockerApi } from '../api';
 
 export const useRoomStore = () => {
@@ -35,6 +35,11 @@ export const useRoomStore = () => {
         }
     }
 
+    const setUserHistory = (userHistory) => {
+        dispatch(setCurrentUserHistory(userHistory));
+        const us = room.userHistories.find(us => us.userHistoryId === userHistory.userHistoryId);
+    }
+
     return {
         counter,
         room,
@@ -42,6 +47,7 @@ export const useRoomStore = () => {
 
         addCounter,
         getRoom,
-        createRoom
+        createRoom,
+        setUserHistory
     }
 }

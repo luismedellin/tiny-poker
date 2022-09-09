@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import 'react-tabs/style/react-tabs.css';
+
 import { useRoomStore } from '../../hooks';
+import { UserHistories } from '../components/UserHistories';
 
 const defaultCards = [
     {
@@ -64,7 +67,7 @@ export const RoomPage = () => {
 
     const [ cards, setCards ] = useState([...defaultCards])
 
-    const { room, currentUser, getRoom } = useRoomStore();
+    const { room, currentUserHistory, getRoom, setUserHistory } = useRoomStore();
 
     useEffect(() => {
         const fetchRoom = async() => {
@@ -97,6 +100,10 @@ export const RoomPage = () => {
         setCards(newCards);
     }
 
+    const selectUserHistory = (userHistory) => {
+        setUserHistory(userHistory);
+    }
+
     if (!room.roomId) return <p>Loading...</p>
 
     return (
@@ -105,8 +112,8 @@ export const RoomPage = () => {
                 <h1>{room.name}</h1>
             </div>
             <div>
-                <h2>{room.name}</h2>
-                <div className="poker-cards d-flex flex-wrap">
+                <h2>{currentUserHistory?.title}</h2>
+                <div className="poker-cards d-flex flex-wrap" disabled={!currentUserHistory}>
                 {
                     cards && cards.map((card, index) => (
                         <div
@@ -121,7 +128,10 @@ export const RoomPage = () => {
                 </div>
 
                 <div>
-                
+                    <UserHistories
+                        userHistories={ room.userHistories }
+                        onSelectUS = { selectUserHistory }
+                        />
                 </div>
             </div>
         </main>
