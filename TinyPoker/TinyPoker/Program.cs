@@ -10,23 +10,26 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IRoomService, RoomService>();
 
 var MyAllowSpecificOrigins = "corsapp";
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(name: MyAllowSpecificOrigins,
-//                      policy =>
-//                      {
-//                          policy.WithOrigins("https://localhost:44498",
-//                                             "https://tiny-pocker.fun",
-//                                             "https://tiny-poker.fun",
-//                                             "https://www.tiny-poker.fun",
-//                                             "https://tinypocker.us-east-1.elasticbeanstalk.com/",
-//                                             "http://tinypocker.us-east-1.elasticbeanstalk.com");
-//                      });
-//});
-builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>
+builder.Services.AddCors(options =>
 {
-    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:44498",
+                                             "http://tiny-poker.fun",
+                                             "http://www.tiny-poker.fun",
+                                             "https://tiny-poker.fun",
+                                             "https://www.tiny-poker.fun",
+                                             "http://tinypoker-dev.eba-cptk2fsu.us-east-1.elasticbeanstalk.com",
+                                             "http://tinypoker-dev.eba-cptk2fsu.us-east-1.elasticbeanstalk.com/")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                      });
+});
+//builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>
+//{
+//    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+//}));
 
 var app = builder.Build();
 
