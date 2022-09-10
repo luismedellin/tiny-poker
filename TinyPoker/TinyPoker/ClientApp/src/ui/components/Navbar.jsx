@@ -1,6 +1,20 @@
 import { Link, NavLink } from 'react-router-dom';
+import { useUserStore } from '../../hooks';
+
+const navMenu = [
+    {
+        to:  '/',
+        name:'Inicio'
+    },
+    {
+        to:  '/rooms',
+        name:'Salas'
+    }
+];
 
 export const Navbar = () => {
+
+  const { user } = useUserStore();
 
   const isActive = ({isActive})=> {
       return `nav-link ${isActive ? 'active' : ''}`;
@@ -29,23 +43,18 @@ export const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarTogglerUltraVotes">
                     
                     <ul className="navbar-nav col-6">
-                        <li className="nav-item dropdown">
-                          <NavLink 
-                              className={ isActive }
-                              to="/"
-                          >
-                              Inicio
-                          </NavLink>
-                        </li>
-
-                        <li className="nav-item">
-                          <NavLink 
-                              className={ isActive }
-                              to="/rooms"
-                          >
-                              Salas
-                          </NavLink>
-                        </li>
+                    {
+                        navMenu.map(({to, name}) => (
+                            <li key={to}
+                                className="nav-item">
+                                <NavLink 
+                                    className={ isActive }
+                                    to={to}>
+                                    {name}
+                                </NavLink>
+                            </li>
+                        ))
+                    }
                     </ul>
                 </div>
             </div>

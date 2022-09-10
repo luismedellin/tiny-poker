@@ -3,10 +3,18 @@ import { createSlice } from '@reduxjs/toolkit';
 export const roomSlice = createSlice({
     name: 'room',   
     initialState: {
-        counter: 10
+        counter: 10,
+        room: {},
+        currentUserHistory: null
     },
     reducers: {
-        addRoom: (state, /* action */ ) => {
+        addRoom: (state, { payload }) => {
+            state.room = payload;
+        },
+        setCurrentUserHistory: (state, { payload }) => {
+            state.currentUserHistory = payload;
+        },
+        setCounter: (state, /* action */ ) => {
             state.counter += 1;
         },
     }
@@ -14,4 +22,8 @@ export const roomSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { addRoom } = roomSlice.actions;
+export const { 
+    addRoom,
+    setCurrentUserHistory,
+    setCounter 
+} = roomSlice.actions;

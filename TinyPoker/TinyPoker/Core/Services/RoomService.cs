@@ -20,7 +20,8 @@ namespace TinyPoker.Core.Services
                     Owner = "lvelandia",
                     UserHistories = new List<UserHistory>()
                     {
-                        new UserHistory(){ IsActive = true, Title = "LATAM2-3891", UserHistoryId = 1, Votes = new List<Vote>()}
+                        new UserHistory(){ IsActive = true, Title = "LATAM2-3891", UserHistoryId = 1, Votes = new List<Vote>()},
+                        new UserHistory(){ IsActive = false, Title = "LATAM2-3892", UserHistoryId = 2, Votes = new List<Vote>()},
                     },
                     Users = new List<User>()
                     {
@@ -34,7 +35,7 @@ namespace TinyPoker.Core.Services
         {
             var room = new Room()
             {
-                RoomId = new Guid().ToString(),
+                RoomId = Guid.NewGuid().ToString(),
                 Name = roomDto.Name,
                 Owner = roomDto.Owner,
                 IsActive = true,

@@ -5,6 +5,7 @@
         public int UserHistoryId { get; set; }
         public string Title { get; set; }
         public bool IsActive { get; set; }
+        public bool IsSelected { get; set; }
         public List<Vote> Votes { get; set; }
     }
 

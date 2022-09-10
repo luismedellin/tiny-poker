@@ -16,13 +16,20 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("https://localhost:44498",
-                                             "https://tiny-pocker.fun",
+                                             "http://tiny-poker.fun",
+                                             "http://www.tiny-poker.fun",
                                              "https://tiny-poker.fun",
                                              "https://www.tiny-poker.fun",
-                                             "https://tinypocker.us-east-1.elasticbeanstalk.com/",
-                                             "http://tinypocker.us-east-1.elasticbeanstalk.com");
+                                             "http://tinypoker-dev.eba-cptk2fsu.us-east-1.elasticbeanstalk.com",
+                                             "http://tinypoker-dev.eba-cptk2fsu.us-east-1.elasticbeanstalk.com/")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
                       });
 });
+//builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>
+//{
+//    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+//}));
 
 var app = builder.Build();
 
