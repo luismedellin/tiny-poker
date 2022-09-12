@@ -1,10 +1,12 @@
 using TinyPoker.Core.Services;
+using TinyPoker.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 
 
 builder.Services.AddTransient<IRoomService, RoomService>();
@@ -23,15 +25,19 @@ builder.Services.AddCors(options =>
                                              "http://tinypoker-dev.eba-cptk2fsu.us-east-1.elasticbeanstalk.com",
                                              "http://tinypoker-dev.eba-cptk2fsu.us-east-1.elasticbeanstalk.com/")
                                     .AllowAnyHeader()
-                                    .AllowAnyMethod();
+                                    .AllowAnyMethod()
+                                    .AllowCredentials();
                       });
 });
+
+builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
 //builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>
 //{
 //    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 //}));
 
 var app = builder.Build();
+app.MapHub<ChatHub>("/chat");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -3,8 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import 'react-tabs/style/react-tabs.css';
 
-import { useRoomStore } from '../../hooks';
+import { useRoomStore, useUserStore } from '../../hooks';
 import { UserHistories } from '../components/UserHistories';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 const defaultCards = [
     {
@@ -61,10 +62,10 @@ const defaultCards = [
     },
 ];
 
-const users = [
-    {"userId":"75357383-a70c-4632-ba15-7700e89bfa85","name":"Luis"},
-    {"userId":"e6cc6bee-2ec8-47dd-ae4d-544fcb50d461","name":"Mary"}
-];
+// const users = [
+//     {"userId":"75357383-a70c-4632-ba15-7700e89bfa85","name":"Luis"},
+//     {"userId":"e6cc6bee-2ec8-47dd-ae4d-544fcb50d461","name":"Mary"}
+// ];
 
 export const RoomPage = () => {
     const navigate = useNavigate();
@@ -73,6 +74,9 @@ export const RoomPage = () => {
     const [ cards, setCards ] = useState([...defaultCards])
 
     const { room, currentUserHistory, getRoom, setUserHistory } = useRoomStore();
+    const { user } = useUserStore();
+    const [ connection, setConnection ] = useState(null);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const fetchRoom = async() => {
@@ -91,6 +95,62 @@ export const RoomPage = () => {
             }, 5000);
         })
     }, [])
+
+    useEffect(() => {
+
+        const joinRoom = async(user, userName, room) => {
+            try {
+                const connection = new HubConnectionBuilder()
+                  .withUrl("https://localhost:7298/chat")
+                  .configureLogging(LogLevel.Information)
+                  .build();
+          
+                connection.on("ReceiveMessage", (user, message) => {
+                  // setMessages(messages => [...messages, { user, message }]);
+                  console.log(user, message)
+                });
+          
+                connection.on("UsersInRoom", (users) => {
+                  setUsers(users);
+                });
+          
+                connection.onclose(e => {
+                  setConnection();
+                  // setMessages([]);
+                  setUsers([]);
+                });
+          
+                if (!connection.connection._connectionStarted) await connection.start();
+                await connection.invoke("JoinRoom", { user, userName, room });
+                setConnection(connection);
+              } catch (e) {
+                console.log(e);
+              }
+        }
+
+        if (room.roomId) joinRoom(user.userId, user.name, room.roomId);
+    }, [room]);
+
+    const sendMessage = async (message) => {
+        const chatMessage = {
+            user: user.userId,
+            message: message
+        };
+
+        try {
+            await connection.invoke("SendMessage", message);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const closeConnection = async () => {
+        try {
+          await connection.stop();
+        } catch (e) {
+          console.log(e);
+        }
+      }
 
     const selectedCard = (index) => {
         const newCards = defaultCards.map((card, i)=> {
@@ -150,8 +210,9 @@ export const RoomPage = () => {
                     </li>
                     {
                         users.map(user => (
-                            <li key={user.userId} className="list-group-item">
-                                {user.name} <span className="badge bg-primary rounded-pill mb-2">14</span>
+                            <li key={user.user} className="list-group-item"
+                                onClick={()=>sendMessage('hola')}>
+                                {user.userName} <span className="badge bg-primary rounded-pill mb-2">14</span>
                             </li>
                         ))
                     }
