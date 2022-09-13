@@ -52,7 +52,7 @@ export const NewRoomPage = () => {
                     className="form-control mb-2"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
+                    value={values.name}
                   />
                   <span className="text-danger">
                     { errors.name && touched.name && errors.name }

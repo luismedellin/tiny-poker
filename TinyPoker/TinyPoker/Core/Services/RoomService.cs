@@ -103,7 +103,7 @@ namespace TinyPoker.Core.Services
 
         public async Task UpdateUserHistory(UserHistoryDto userHistoryDto)
         {
-            var userHistory = await GetUserHistory(userHistoryDto.RoomId, userHistoryDto.UserHistoryId);
+            var userHistory = await GetUserHistory(userHistoryDto.RoomId, userHistoryDto.UserHistoryId.Value);
 
             if (userHistory == null) return;
 

@@ -17,6 +17,9 @@ export const roomSlice = createSlice({
         setCounter: (state, /* action */ ) => {
             state.counter += 1;
         },
+        addUserHistory: (state, { payload }) => {
+            state.room.userHistories.push(payload);
+        }
     }
 });
 
@@ -25,5 +28,7 @@ export const roomSlice = createSlice({
 export const { 
     addRoom,
     setCurrentUserHistory,
-    setCounter 
+    setCounter,
+
+    addUserHistory
 } = roomSlice.actions;

@@ -37,7 +37,7 @@ builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new D
 //}));
 
 var app = builder.Build();
-app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("/api/chat");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

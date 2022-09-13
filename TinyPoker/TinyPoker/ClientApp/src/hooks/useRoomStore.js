@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoom, setCounter, setCurrentUserHistory } from '../store';
+import { addRoom, setCounter, setCurrentUserHistory, addUserHistory } from '../store';
 import { tinyPockerApi } from '../api';
 
 export const useRoomStore = () => {
@@ -35,6 +35,21 @@ export const useRoomStore = () => {
         }
     }
 
+    const createUserHistory = async(title) => {
+        const userHistory = {
+            roomId: room.roomId,
+            title: title
+        };
+
+        try{
+            const { data } = await tinyPockerApi.post('/userHistory', userHistory);
+            dispatch(addUserHistory(data));
+            return data;
+        } catch (e) {
+            
+        }
+    }
+
     const setUserHistory = (userHistory) => {
         dispatch(setCurrentUserHistory(userHistory));
         const us = room.userHistories.find(us => us.userHistoryId === userHistory.userHistoryId);
@@ -48,6 +63,8 @@ export const useRoomStore = () => {
         addCounter,
         getRoom,
         createRoom,
-        setUserHistory
+        
+        setUserHistory,
+        createUserHistory,
     }
 }
