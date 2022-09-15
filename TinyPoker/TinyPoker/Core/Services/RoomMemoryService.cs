@@ -3,11 +3,11 @@ using TinyPoker.Data.Models;
 
 namespace TinyPoker.Core.Services
 {
-    public class RoomService : IRoomService
+    public class RoomMemoryService : IRoomService
     {
         private readonly List<Room> _rooms;
 
-        public RoomService()
+        public RoomMemoryService()
         {
             _rooms = new List<Room>()
             {
@@ -15,13 +15,13 @@ namespace TinyPoker.Core.Services
                 {
                     RoomId = "abc1",
                     Name = "Latam2",
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.Now.ToString(),
                     IsActive = true,
                     Owner = "lvelandia",
                     UserStories = new List<UserStory>()
                     {
-                        new UserStory(){ IsActive = true, Title = "LATAM2-3891", UserStoryId = 1, Votes = new List<Vote>()},
-                        new UserStory(){ IsActive = false, Title = "LATAM2-3892", UserStoryId = 2, Votes = new List<Vote>()},
+                        new UserStory(){ IsActive = true, Title = "LATAM2-3891", UserStoryId = "1", Votes = new List<Vote>()},
+                        new UserStory(){ IsActive = false, Title = "LATAM2-3892", UserStoryId = "2", Votes = new List<Vote>()},
                     },
                     Users = new List<User>()
                     {
@@ -40,7 +40,7 @@ namespace TinyPoker.Core.Services
                 Owner = roomDto.Owner,
                 IsActive = true,
                 UserStories = new List<UserStory>(),
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.Now.ToString(),
                 Users = new List<User>() { new User() { UserId = roomDto.Owner, Name = roomDto.Name } }
             };
 
@@ -55,7 +55,7 @@ namespace TinyPoker.Core.Services
 
             var userStory = new UserStory()
             {
-                UserStoryId = room.UserStories.Count + 1,
+                UserStoryId = (room.UserStories.Count + 1).ToString(),
                 Title = userStoryDto.Title,
                 IsActive = true
             };
@@ -74,7 +74,7 @@ namespace TinyPoker.Core.Services
             return await Task.FromResult(room);
         }
 
-        public async Task<UserStory> GetUserStory(string roomId, int UserStoryId)
+        public async Task<UserStory> GetUserStory(string roomId, string UserStoryId)
         {
             var room = await GetRoom(roomId);
             var userStory = room.UserStories.FirstOrDefault(us => us.UserStoryId ==UserStoryId);
@@ -103,7 +103,7 @@ namespace TinyPoker.Core.Services
 
         public async Task UpdateUserStory(UserStoryDto userStoryDto)
         {
-            var userStory = await GetUserStory(userStoryDto.RoomId, userStoryDto.UserStoryId.Value);
+            var userStory = await GetUserStory(userStoryDto.RoomId, userStoryDto.UserStoryId);
 
             if (userStory == null) return;
 
@@ -132,7 +132,7 @@ namespace TinyPoker.Core.Services
             userStory.Votes.Add(vote);
         }
 
-        public async Task DeleteUserStory(string roomId, int userStoryId)
+        public async Task DeleteUserStory(string roomId, string userStoryId)
         {
             var room = await GetRoom(roomId);
 

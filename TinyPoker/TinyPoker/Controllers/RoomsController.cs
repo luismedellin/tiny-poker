@@ -18,10 +18,18 @@ namespace TinyPoker.Controllers
         [HttpGet("{roomId}")]
         public async Task<IActionResult> GetRoom(string roomId)
         {
-            var room = await roomService.GetRoom(roomId);
-            if(room == null) return NotFound();
+            try
+            {
+                var room = await roomService.GetRoom(roomId);
+                if (room == null) return NotFound();
 
-            return Ok(room);
+                return Ok(room);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]

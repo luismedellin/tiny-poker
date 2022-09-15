@@ -1,3 +1,5 @@
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using TinyPoker.Core.Services;
 using TinyPoker.Hubs;
 
@@ -9,7 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 
-builder.Services.AddTransient<IRoomService, RoomService>();
+builder.Services.AddTransient<IRoomService, RoomDbService>();
 
 var MyAllowSpecificOrigins = "corsapp";
 builder.Services.AddCors(options =>
@@ -29,6 +31,11 @@ builder.Services.AddCors(options =>
                                     .AllowCredentials();
                       });
 });
+
+var awsOptions = builder.Configuration.GetAWSOptions();
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonDynamoDB>();
+builder.Services.AddScoped<IDynamoDBContext, DynamoDBContext>();
 
 builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
 //builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>

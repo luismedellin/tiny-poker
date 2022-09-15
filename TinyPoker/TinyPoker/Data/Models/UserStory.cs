@@ -1,11 +1,18 @@
-﻿namespace TinyPoker.Data.Models
+﻿using Amazon.DynamoDBv2.DataModel;
+
+namespace TinyPoker.Data.Models
 {
+
     public class UserStory
     {
-        public int UserStoryId { get; set; }
-        public string Title { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsSelected { get; set; }
+        [DynamoDBProperty("userStoryId")]
+        public string? UserStoryId { get; set; }
+        [DynamoDBProperty("title")]
+        public string? Title { get; set; }
+        [DynamoDBProperty("isActive")]
+        public bool? IsActive { get; set; }
+        [DynamoDBProperty("isSelected")]
+        public bool? IsSelected { get; set; }
         public List<Vote> Votes { get; set; }
     }
 

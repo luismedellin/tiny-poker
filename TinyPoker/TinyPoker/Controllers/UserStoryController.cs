@@ -32,7 +32,7 @@ namespace TinyPoker.Controllers
         }
 
         [HttpGet("{roomId}/{userStoryId}")]
-        public async Task<IActionResult> GetRoom(string roomId, int userStoryId)
+        public async Task<IActionResult> GetRoom(string roomId, string userStoryId)
         {
             var room = await roomService.GetUserStory(roomId, userStoryId);
             if (room == null) return NotFound();
@@ -49,7 +49,7 @@ namespace TinyPoker.Controllers
         }
 
         [HttpDelete("{roomId}/{userStoryId}")]
-        public async Task<IActionResult> DeleteUserStory(string roomId, int userStoryId)
+        public async Task<IActionResult> DeleteUserStory(string roomId, string userStoryId)
         {
             await roomService.DeleteUserStory(roomId, userStoryId);
 
