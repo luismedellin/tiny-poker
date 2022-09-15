@@ -7,7 +7,7 @@
         public string? Owner { get; set; }
         public DateTime? CreateDate { get; set; }
         public bool? IsActive { get; set; }
-        public List<UserHistory> UserHistories { get; set; }
+        public List<UserStory> UserStories { get; set; }
         public List<User> Users { get; set; }
     }
 }

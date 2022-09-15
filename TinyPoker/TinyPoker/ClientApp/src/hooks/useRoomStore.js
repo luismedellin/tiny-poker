@@ -1,11 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoom, setCounter, setCurrentUserHistory } from '../store';
+import { 
+    addRoom, 
+    setCounter, 
+    setCurrentUserStory, 
+    onAddingUserStory, 
+    onDeleteUserStory 
+} from '../store';
 import { tinyPockerApi } from '../api';
+import { useChatRoomStore } from './';
 
 export const useRoomStore = () => {
     const dispatch = useDispatch();
 
-    const { counter, room, currentUserHistory } = useSelector(state => state.room );
+    const { counter, room, currentUserStory } = useSelector(state => state.room );
+    const { sendMessage } = useChatRoomStore();
     const { user } = useSelector(state => state.user );
 
     const addCounter = async () => {
@@ -35,19 +43,57 @@ export const useRoomStore = () => {
         }
     }
 
-    const setUserHistory = (userHistory) => {
-        dispatch(setCurrentUserHistory(userHistory));
-        const us = room.userHistories.find(us => us.userHistoryId === userHistory.userHistoryId);
+    const createUserStory = async(title) => {
+        const userStory = {
+            roomId: room.roomId,
+            title: title
+        };
+
+        try{
+            const { data } = await tinyPockerApi.post('/userStory', userStory);
+            addUserStory(data);
+            sendMessage("createUserStory", JSON.stringify(data));
+        } catch (e) {
+            
+        }
+    }
+
+    const deleteUserStory = async(room, userStoryId) => {
+        try{
+            await tinyPockerApi.delete(`/userStory/${room}/${userStoryId}`);
+            dispatch(onDeleteUserStory(userStoryId));
+            sendMessage("deleteUserStory", JSON.stringify(userStoryId));
+        } catch (e) {
+            
+        }
+    }
+
+    const addUserStory = (userStory) => {
+        dispatch(onAddingUserStory(userStory));
+    }
+
+    const setUserStory = (userStory) => {
+        dispatch(setCurrentUserStory(userStory));
+        const us = room.userStories.find(us => us.userStoryId === userStory.userStoryId);
+    }
+
+    const removeUserStory = (userStoryId) => {
+        dispatch(onDeleteUserStory(userStoryId));
     }
 
     return {
         counter,
         room,
-        currentUserHistory,
+        currentUserStory,
 
         addCounter,
         getRoom,
         createRoom,
-        setUserHistory
+        
+        setUserStory,
+        createUserStory,
+        addUserStory,
+        deleteUserStory,
+        removeUserStory
     }
 }

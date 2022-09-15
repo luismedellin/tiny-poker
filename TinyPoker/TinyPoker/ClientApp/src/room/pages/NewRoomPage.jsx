@@ -28,7 +28,6 @@ export const NewRoomPage = () => {
               console.log(JSON.stringify(values, null, 2))
 
               setTimeout(async() => {
-                debugger;
                 const newRoom = await createRoom(values);
                 navigate(`/rooms/${newRoom.roomId}`);
               }, 100);
@@ -52,7 +51,7 @@ export const NewRoomPage = () => {
                     className="form-control mb-2"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
+                    value={values.name}
                   />
                   <span className="text-danger">
                     { errors.name && touched.name && errors.name }

@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import 'react-tabs/style/react-tabs.css';
 
-import { useRoomStore } from '../../hooks';
-import { UserHistories } from '../components/UserHistories';
+import { useRoomStore, useUserStore, useChatRoomStore } from '../../hooks';
+import { UserStories, RoomUsers } from '../';
 
 const defaultCards = [
     {
@@ -61,18 +61,16 @@ const defaultCards = [
     },
 ];
 
-const users = [
-    {"userId":"75357383-a70c-4632-ba15-7700e89bfa85","name":"Luis"},
-    {"userId":"e6cc6bee-2ec8-47dd-ae4d-544fcb50d461","name":"Mary"}
-];
-
 export const RoomPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
     const [ cards, setCards ] = useState([...defaultCards])
 
-    const { room, currentUserHistory, getRoom, setUserHistory } = useRoomStore();
+    const { room, currentUserStory, getRoom, setUserStory, deleteUserStory, removeUserStory } = useRoomStore();
+    const { users, joinRoom, sendMessage } = useChatRoomStore();
+    const { user } = useUserStore();
+    const { messages } = useChatRoomStore();
 
     useEffect(() => {
         const fetchRoom = async() => {
@@ -92,6 +90,20 @@ export const RoomPage = () => {
         })
     }, [])
 
+    useEffect(() => {
+        if (room.roomId) joinRoom(user.userId, user.name, room.roomId);
+    }, [room]);
+
+    useEffect(() => {
+        if (!messages.length) return;
+        const deleteMessages = messages.find(m=> m.messageType === "deleteUserStory" && user.userId !== m.user);
+        
+        if (deleteMessages){
+            removeUserStory(JSON.parse(deleteMessages.message));
+        }
+
+    }, [messages])
+
     const selectedCard = (index) => {
         const newCards = defaultCards.map((card, i)=> {
             if(i !== index) return card;
@@ -105,8 +117,20 @@ export const RoomPage = () => {
         setCards(newCards);
     }
 
-    const selectUserHistory = (userHistory) => {
-        setUserHistory(userHistory);
+    const selectUserStory = (userStory) => {
+        setUserStory(userStory);
+    }
+
+    const onDeleteUserStory = (userStoryId) => {
+        Swal.fire({
+            title: 'Está seguro de borrar esta historia de usuario?',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                deleteUserStory(room.roomId, userStoryId);
+            }
+          });
     }
 
     if (!room.roomId) return <p>Loading...</p>
@@ -119,8 +143,8 @@ export const RoomPage = () => {
 
             <div className="d-flex">
             <div>
-                <h2>{currentUserHistory?.title}</h2>
-                <div className="poker-cards d-flex flex-wrap" disabled={!currentUserHistory}>
+                <h2>{currentUserStory?.title}</h2>
+                <div className="poker-cards d-flex flex-wrap" disabled={!currentUserStory}>
                 {
                     cards && cards.map((card, index) => (
                         <div
@@ -135,28 +159,15 @@ export const RoomPage = () => {
                 </div>
 
                 <div>
-                    <UserHistories
-                        userHistories={ room.userHistories }
-                        onSelectUS = { selectUserHistory }
+                    <UserStories
+                        userStories={ room.userStories }
+                        deleteUserStory = { onDeleteUserStory }
+                        onSelectUS = { selectUserStory }
                         />
                 </div>
             </div>
 
-            <div className="card" style={{width: "20rem"}}>
-                <h5 className="card-header text-center bg-primary text-white">Users</h5>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                        Players:
-                    </li>
-                    {
-                        users.map(user => (
-                            <li key={user.userId} className="list-group-item">
-                                {user.name} <span className="badge bg-primary rounded-pill mb-2">14</span>
-                            </li>
-                        ))
-                    }
-                </ul>
-            </div>
+            <RoomUsers users= {users} sendMessage={sendMessage} />
 
             </div>
 

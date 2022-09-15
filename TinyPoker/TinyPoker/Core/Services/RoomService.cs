@@ -18,10 +18,10 @@ namespace TinyPoker.Core.Services
                     CreateDate = DateTime.Now,
                     IsActive = true,
                     Owner = "lvelandia",
-                    UserHistories = new List<UserHistory>()
+                    UserStories = new List<UserStory>()
                     {
-                        new UserHistory(){ IsActive = true, Title = "LATAM2-3891", UserHistoryId = 1, Votes = new List<Vote>()},
-                        new UserHistory(){ IsActive = false, Title = "LATAM2-3892", UserHistoryId = 2, Votes = new List<Vote>()},
+                        new UserStory(){ IsActive = true, Title = "LATAM2-3891", UserStoryId = 1, Votes = new List<Vote>()},
+                        new UserStory(){ IsActive = false, Title = "LATAM2-3892", UserStoryId = 2, Votes = new List<Vote>()},
                     },
                     Users = new List<User>()
                     {
@@ -39,7 +39,7 @@ namespace TinyPoker.Core.Services
                 Name = roomDto.Name,
                 Owner = roomDto.Owner,
                 IsActive = true,
-                UserHistories = new List<UserHistory>(),
+                UserStories = new List<UserStory>(),
                 CreateDate = DateTime.Now,
                 Users = new List<User>() { new User() { UserId = roomDto.Owner, Name = roomDto.Name } }
             };
@@ -49,20 +49,20 @@ namespace TinyPoker.Core.Services
             return await Task.FromResult(room);
         }
 
-        public async Task<UserHistory> CreateUserHistory(UserHistoryDto userHistoryDto)
+        public async Task<UserStory> CreateUserStory(UserStoryDto userStoryDto)
         {
-            var room = await GetRoom(userHistoryDto.RoomId);
+            var room = await GetRoom(userStoryDto.RoomId);
 
-            var userHistory = new UserHistory()
+            var userStory = new UserStory()
             {
-                UserHistoryId = room.UserHistories.Count + 1,
-                Title = userHistoryDto.Title,
+                UserStoryId = room.UserStories.Count + 1,
+                Title = userStoryDto.Title,
                 IsActive = true
             };
 
-            room.UserHistories.Add(userHistory);
+            room.UserStories.Add(userStory);
 
-            return await Task.FromResult(userHistory);
+            return await Task.FromResult(userStory);
         }
 
         public async Task<Room?> GetRoom(string roomId)
@@ -74,12 +74,12 @@ namespace TinyPoker.Core.Services
             return await Task.FromResult(room);
         }
 
-        public async Task<UserHistory> GetUserHistory(string roomId, int UserHistoryId)
+        public async Task<UserStory> GetUserStory(string roomId, int UserStoryId)
         {
             var room = await GetRoom(roomId);
-            var userHistory = room.UserHistories.FirstOrDefault(us => us.UserHistoryId ==UserHistoryId);
+            var userStory = room.UserStories.FirstOrDefault(us => us.UserStoryId ==UserStoryId);
 
-            return await Task.FromResult(userHistory);
+            return await Task.FromResult(userStory);
         }
 
         public async Task UpdateRoom(RoomDto roomDto)
@@ -101,23 +101,23 @@ namespace TinyPoker.Core.Services
             room.Users.Add(new User { UserId = userDto.UserId, Name = userDto.Name });
         }
 
-        public async Task UpdateUserHistory(UserHistoryDto userHistoryDto)
+        public async Task UpdateUserStory(UserStoryDto userStoryDto)
         {
-            var userHistory = await GetUserHistory(userHistoryDto.RoomId, userHistoryDto.UserHistoryId);
+            var userStory = await GetUserStory(userStoryDto.RoomId, userStoryDto.UserStoryId.Value);
 
-            if (userHistory == null) return;
+            if (userStory == null) return;
 
-            userHistory.Title = userHistoryDto.Title;
-            userHistory.IsActive = userHistoryDto.IsActive.Value;
+            userStory.Title = userStoryDto.Title;
+            userStory.IsActive = userStoryDto.IsActive.Value;
         }
 
         public async Task Vote(VoteDto voteDto)
         {
-            var userHistory = await GetUserHistory(voteDto.RoomId, voteDto.UserHistoryId );
+            var userStory = await GetUserStory(voteDto.RoomId, voteDto.UserStoryId );
 
-            if (userHistory == null) return;
+            if (userStory == null) return;
 
-            var savedVote = userHistory.Votes.FirstOrDefault(v => v.UserId == voteDto.User);
+            var savedVote = userStory.Votes.FirstOrDefault(v => v.UserId == voteDto.User);
             var vote = new Vote()
             {
                 UserId = voteDto.User,
@@ -126,18 +126,18 @@ namespace TinyPoker.Core.Services
 
             if (savedVote != null)
             {
-                userHistory.Votes.Remove(savedVote);
+                userStory.Votes.Remove(savedVote);
             }
 
-            userHistory.Votes.Add(vote);
+            userStory.Votes.Add(vote);
         }
 
-        public async Task DeleteUserHistory(string roomId, int userHistoryId)
+        public async Task DeleteUserStory(string roomId, int userStoryId)
         {
             var room = await GetRoom(roomId);
 
-            var userHistory = room.UserHistories.First(u => u.UserHistoryId == userHistoryId);
-            room.UserHistories.Remove(userHistory);
+            var userStory = room.UserStories.First(u => u.UserStoryId == userStoryId);
+            room.UserStories.Remove(userStory);
         }
 
         public async Task RemoveUser(string roomId, string userId)
