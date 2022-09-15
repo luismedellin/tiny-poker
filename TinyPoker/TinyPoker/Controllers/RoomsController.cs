@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using TinyPoker.Core.DTOs;
 using TinyPoker.Core.Services;
 
@@ -27,8 +28,7 @@ namespace TinyPoker.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
