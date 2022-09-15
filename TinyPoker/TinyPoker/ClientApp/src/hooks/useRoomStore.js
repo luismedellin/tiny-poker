@@ -2,9 +2,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { 
     addRoom, 
     setCounter, 
-    setCurrentUserHistory, 
-    onAddingUserHistory, 
-    onDeleteUserHistory 
+    setCurrentUserStory, 
+    onAddingUserStory, 
+    onDeleteUserStory 
 } from '../store';
 import { tinyPockerApi } from '../api';
 import { useChatRoomStore } from './';
@@ -12,7 +12,7 @@ import { useChatRoomStore } from './';
 export const useRoomStore = () => {
     const dispatch = useDispatch();
 
-    const { counter, room, currentUserHistory } = useSelector(state => state.room );
+    const { counter, room, currentUserStory } = useSelector(state => state.room );
     const { sendMessage } = useChatRoomStore();
     const { user } = useSelector(state => state.user );
 
@@ -43,57 +43,57 @@ export const useRoomStore = () => {
         }
     }
 
-    const createUserHistory = async(title) => {
-        const userHistory = {
+    const createUserStory = async(title) => {
+        const userStory = {
             roomId: room.roomId,
             title: title
         };
 
         try{
-            const { data } = await tinyPockerApi.post('/userHistory', userHistory);
-            addUserHistory(data);
-            sendMessage("createUserHistory", JSON.stringify(data));
+            const { data } = await tinyPockerApi.post('/userStory', userStory);
+            addUserStory(data);
+            sendMessage("createUserStory", JSON.stringify(data));
         } catch (e) {
             
         }
     }
 
-    const deleteUserHistory = async(room, userHistoryId) => {
+    const deleteUserStory = async(room, userStoryId) => {
         try{
-            await tinyPockerApi.delete(`/userHistory/${room}/${userHistoryId}`);
-            dispatch(onDeleteUserHistory(userHistoryId));
-            sendMessage("deleteUserHistory", JSON.stringify(userHistoryId));
+            await tinyPockerApi.delete(`/userStory/${room}/${userStoryId}`);
+            dispatch(onDeleteUserStory(userStoryId));
+            sendMessage("deleteUserStory", JSON.stringify(userStoryId));
         } catch (e) {
             
         }
     }
 
-    const addUserHistory = (userHistory) => {
-        dispatch(onAddingUserHistory(userHistory));
+    const addUserStory = (userStory) => {
+        dispatch(onAddingUserStory(userStory));
     }
 
-    const setUserHistory = (userHistory) => {
-        dispatch(setCurrentUserHistory(userHistory));
-        const us = room.userHistories.find(us => us.userHistoryId === userHistory.userHistoryId);
+    const setUserStory = (userStory) => {
+        dispatch(setCurrentUserStory(userStory));
+        const us = room.userStories.find(us => us.userStoryId === userStory.userStoryId);
     }
 
-    const removeUserHistory = (userHistoryId) => {
-        dispatch(onDeleteUserHistory(userHistoryId));
+    const removeUserStory = (userStoryId) => {
+        dispatch(onDeleteUserStory(userStoryId));
     }
 
     return {
         counter,
         room,
-        currentUserHistory,
+        currentUserStory,
 
         addCounter,
         getRoom,
         createRoom,
         
-        setUserHistory,
-        createUserHistory,
-        addUserHistory,
-        deleteUserHistory,
-        removeUserHistory
+        setUserStory,
+        createUserStory,
+        addUserStory,
+        deleteUserStory,
+        removeUserStory
     }
 }

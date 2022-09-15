@@ -5,23 +5,23 @@ export const roomSlice = createSlice({
     initialState: {
         counter: 10,
         room: {},
-        currentUserHistory: null
+        currentUserStory: null
     },
     reducers: {
         addRoom: (state, { payload }) => {
             state.room = payload;
         },
-        setCurrentUserHistory: (state, { payload }) => {
-            state.currentUserHistory = payload;
+        setCurrentUserStory: (state, { payload }) => {
+            state.currentUserStory = payload;
         },
         setCounter: (state, /* action */ ) => {
             state.counter += 1;
         },
-        onAddingUserHistory: (state, { payload }) => {
-            state.room.userHistories.push(payload);
+        onAddingUserStory: (state, { payload }) => {
+            state.room.userStories.push(payload);
         },
-        onDeleteUserHistory: (state, { payload }) => {
-            state.room.userHistories = state.room.userHistories.filter(us=> us.userHistoryId !== payload);
+        onDeleteUserStory: (state, { payload }) => {
+            state.room.userStories = state.room.userStories.filter(us=> us.userStoryId !== payload);
         }
     }
 });
@@ -30,9 +30,9 @@ export const roomSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { 
     addRoom,
-    setCurrentUserHistory,
+    setCurrentUserStory,
     setCounter,
 
-    onAddingUserHistory,
-    onDeleteUserHistory
+    onAddingUserStory,
+    onDeleteUserStory
 } = roomSlice.actions;

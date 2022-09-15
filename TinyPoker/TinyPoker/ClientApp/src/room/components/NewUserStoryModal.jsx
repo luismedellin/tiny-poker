@@ -25,19 +25,19 @@ const customStyles = {
 
   Modal.setAppElement('#root');
 
-export const NewUserHistoryModal = ({userHistories}) => {
+export const NewUserStoryModal = ({userStories}) => {
 
     const { isModalOpen, closeModal } = useUiStore();
-    const { createUserHistory, addUserHistory } = useRoomStore();
+    const { createUserStory, addUserStory } = useRoomStore();
     const { messages } = useChatRoomStore();
     const { user } = useUserStore();
 
     useEffect(() => {
         if (!messages.length) return;
-        const createMessages = messages.find(m=> m.messageType === "createUserHistory" && user.userId !== m.user );
+        const createMessages = messages.find(m=> m.messageType === "createUserStory" && user.userId !== m.user );
         
         if (createMessages){
-            addUserHistory(JSON.parse(createMessages.message));
+            addUserStory(JSON.parse(createMessages.message));
         }
 
     }, [messages])
@@ -48,18 +48,18 @@ export const NewUserHistoryModal = ({userHistories}) => {
 
     const validateName = (name) => {
         let error;
-        if (userHistories.some(us=> us.title === name))
+        if (userStories.some(us=> us.title === name))
             error = 'Historia de usuario existente';
         return error;
     }
 
     const saveAndReset = (values, resetForm)  => {
-        createUserHistory(values.name);
+        createUserStory(values.name);
         resetForm();
     }
 
     const saveAndClose = (values)  => {
-        createUserHistory(values.name);
+        createUserStory(values.name);
         closeModal();
     }
 
@@ -96,7 +96,7 @@ export const NewUserHistoryModal = ({userHistories}) => {
                 }) => (
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="name" className="form-label">Ingresa el nombre la User History</label>
+                        <label htmlFor="name" className="form-label">Ingresa el nombre la User Story</label>
                         <Field name="name" validate={ validateName } className="form-control mb-2" />
                         <span className="text-danger">
                             { errors.name && touched.name && <div>{errors.name}</div> }

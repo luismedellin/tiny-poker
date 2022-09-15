@@ -24,7 +24,7 @@ namespace TinyPoker.Controllers
         }
 
         [HttpDelete("{roomId}/{userId}")]
-        public async Task<IActionResult> DeleteUserHistory(string roomId, string userId)
+        public async Task<IActionResult> DeleteUser(string roomId, string userId)
         {
             await roomService.RemoveUser(roomId, userId);
 

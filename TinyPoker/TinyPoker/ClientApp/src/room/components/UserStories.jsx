@@ -1,11 +1,9 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { useUiStore } from '../../hooks';
 
-import { NewUserHistoryModal } from './NewUserHistoryModal';
+import { NewUserStoryModal } from './NewUserStoryModal';
 
-
-
-export const UserHistories = ({userHistories, onSelectUS, deleteUserHistory}) => {
+export const UserStories = ({userStories, onSelectUS, deleteUserStory}) => {
     const { openModal } = useUiStore();
 
     const abrirModal = () => {
@@ -20,7 +18,7 @@ export const UserHistories = ({userHistories, onSelectUS, deleteUserHistory}) =>
                 <i className="fa-solid fa-plus"></i> Agregar
             </button>
 
-            <NewUserHistoryModal userHistories={ userHistories } />
+            <NewUserStoryModal userStories={ userStories } />
 
             <Tabs>
                 <TabList>
@@ -32,15 +30,15 @@ export const UserHistories = ({userHistories, onSelectUS, deleteUserHistory}) =>
                 <TabPanel>
                     <ul>
                     {
-                        userHistories.map(us=> (
-                            <li key={us.userHistoryId}
+                        userStories.map(us=> (
+                            <li key={us.userStoryId}
                                 className="d-flex justify-content-between mb-2 pe-2 "
                                 onClick={() => onSelectUS(us)}
                                 >
                             <span className="w-75">{us.title}</span>
                             <button 
                                 className="btn btn-outline-secondary btn-sm"
-                                onClick={() => deleteUserHistory(us.userHistoryId)}
+                                onClick={() => deleteUserStory(us.userStoryId)}
                                 >
                                 <i className="fa fa-trash" aria-hidden="true"></i>
                             </button>

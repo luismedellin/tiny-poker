@@ -1,8 +1,8 @@
 ﻿namespace TinyPoker.Data.Models
 {
-    public class UserHistory
+    public class UserStory
     {
-        public int UserHistoryId { get; set; }
+        public int UserStoryId { get; set; }
         public string Title { get; set; }
         public bool IsActive { get; set; }
         public bool IsSelected { get; set; }

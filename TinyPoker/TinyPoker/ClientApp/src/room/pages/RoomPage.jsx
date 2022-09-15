@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import 'react-tabs/style/react-tabs.css';
 
 import { useRoomStore, useUserStore, useChatRoomStore } from '../../hooks';
-import { UserHistories, RoomUsers } from '../';
+import { UserStories, RoomUsers } from '../';
 
 const defaultCards = [
     {
@@ -67,7 +67,7 @@ export const RoomPage = () => {
 
     const [ cards, setCards ] = useState([...defaultCards])
 
-    const { room, currentUserHistory, getRoom, setUserHistory, deleteUserHistory, removeUserHistory } = useRoomStore();
+    const { room, currentUserStory, getRoom, setUserStory, deleteUserStory, removeUserStory } = useRoomStore();
     const { users, joinRoom, sendMessage } = useChatRoomStore();
     const { user } = useUserStore();
     const { messages } = useChatRoomStore();
@@ -96,10 +96,10 @@ export const RoomPage = () => {
 
     useEffect(() => {
         if (!messages.length) return;
-        const deleteMessages = messages.find(m=> m.messageType === "deleteUserHistory" && user.userId !== m.user);
+        const deleteMessages = messages.find(m=> m.messageType === "deleteUserStory" && user.userId !== m.user);
         
         if (deleteMessages){
-            removeUserHistory(JSON.parse(deleteMessages.message));
+            removeUserStory(JSON.parse(deleteMessages.message));
         }
 
     }, [messages])
@@ -117,18 +117,18 @@ export const RoomPage = () => {
         setCards(newCards);
     }
 
-    const selectUserHistory = (userHistory) => {
-        setUserHistory(userHistory);
+    const selectUserStory = (userStory) => {
+        setUserStory(userStory);
     }
 
-    const onDeleteUserHistory = (userHistoryId) => {
+    const onDeleteUserStory = (userStoryId) => {
         Swal.fire({
             title: 'Está seguro de borrar esta historia de usuario?',
             showCancelButton: true,
             confirmButtonText: 'Confirmar',
           }).then((result) => {
             if (result.isConfirmed) {
-                deleteUserHistory(room.roomId, userHistoryId);
+                deleteUserStory(room.roomId, userStoryId);
             }
           });
     }
@@ -143,8 +143,8 @@ export const RoomPage = () => {
 
             <div className="d-flex">
             <div>
-                <h2>{currentUserHistory?.title}</h2>
-                <div className="poker-cards d-flex flex-wrap" disabled={!currentUserHistory}>
+                <h2>{currentUserStory?.title}</h2>
+                <div className="poker-cards d-flex flex-wrap" disabled={!currentUserStory}>
                 {
                     cards && cards.map((card, index) => (
                         <div
@@ -159,10 +159,10 @@ export const RoomPage = () => {
                 </div>
 
                 <div>
-                    <UserHistories
-                        userHistories={ room.userHistories }
-                        deleteUserHistory = { onDeleteUserHistory }
-                        onSelectUS = { selectUserHistory }
+                    <UserStories
+                        userStories={ room.userStories }
+                        deleteUserStory = { onDeleteUserStory }
+                        onSelectUS = { selectUserStory }
                         />
                 </div>
             </div>

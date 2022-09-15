@@ -6,14 +6,14 @@ namespace TinyPoker.Core.Services
     public interface IRoomService
     {
         Task<Room> CreateRoom(RoomDto roomDto);
-        Task<UserHistory> CreateUserHistory(UserHistoryDto userHistory);
+        Task<UserStory> CreateUserStory(UserStoryDto userStory);
         Task<Room?> GetRoom(string roomId);
-        Task<UserHistory> GetUserHistory(string roomId, int UserHistoryId);
+        Task<UserStory> GetUserStory(string roomId, int UserStoryId);
         Task UpdateRoom(RoomDto roomDto);
         Task AddUser(UserDto userDto);
-        Task UpdateUserHistory(UserHistoryDto userHistoryDto);
+        Task UpdateUserStory(UserStoryDto userStoryDto);
         Task Vote(VoteDto voteDto);
-        Task DeleteUserHistory(string roomId, int userHistoryId);
+        Task DeleteUserStory(string roomId, int userStoryId);
         Task RemoveUser(string roomId, string userId);
     }
 }
