@@ -17,8 +17,11 @@ export const roomSlice = createSlice({
         setCounter: (state, /* action */ ) => {
             state.counter += 1;
         },
-        addUserHistory: (state, { payload }) => {
+        onAddingUserHistory: (state, { payload }) => {
             state.room.userHistories.push(payload);
+        },
+        onDeleteUserHistory: (state, { payload }) => {
+            state.room.userHistories = state.room.userHistories.filter(us=> us.userHistoryId !== payload);
         }
     }
 });
@@ -30,5 +33,6 @@ export const {
     setCurrentUserHistory,
     setCounter,
 
-    addUserHistory
+    onAddingUserHistory,
+    onDeleteUserHistory
 } = roomSlice.actions;

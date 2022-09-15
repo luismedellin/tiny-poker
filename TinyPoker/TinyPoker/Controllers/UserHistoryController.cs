@@ -53,7 +53,7 @@ namespace TinyPoker.Controllers
         {
             await roomService.DeleteUserHistory(roomId, userHistoryId);
 
-            return Ok("User History updated");
+            return Ok("User History deleted");
         }
     }
 }

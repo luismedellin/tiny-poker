@@ -5,13 +5,12 @@ import { NewUserHistoryModal } from './NewUserHistoryModal';
 
 
 
-export const UserHistories = ({userHistories, onSelectUS}) => {
-
+export const UserHistories = ({userHistories, onSelectUS, deleteUserHistory}) => {
     const { openModal } = useUiStore();
 
     const abrirModal = () => {
         openModal();
-    }
+    }    
 
     return (
         <div>
@@ -35,8 +34,17 @@ export const UserHistories = ({userHistories, onSelectUS}) => {
                     {
                         userHistories.map(us=> (
                             <li key={us.userHistoryId}
+                                className="d-flex justify-content-between mb-2 pe-2 "
                                 onClick={() => onSelectUS(us)}
-                                >{us.title}</li>
+                                >
+                            <span className="w-75">{us.title}</span>
+                            <button 
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() => deleteUserHistory(us.userHistoryId)}
+                                >
+                                <i className="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                            </li>
                         ))
                     }
                     </ul>

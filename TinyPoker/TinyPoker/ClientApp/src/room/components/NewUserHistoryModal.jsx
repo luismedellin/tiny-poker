@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Formik, Field } from 'formik';
 import Modal from 'react-modal';
 
 import * as yup from 'yup';
-import { useRoomStore, useUiStore } from '../../hooks';
+import { useChatRoomStore, useRoomStore, useUiStore, useUserStore } from '../../hooks';
 
 const schema = yup.object().shape({
     name: yup.string()
@@ -28,7 +28,19 @@ const customStyles = {
 export const NewUserHistoryModal = ({userHistories}) => {
 
     const { isModalOpen, closeModal } = useUiStore();
-    const { createUserHistory } = useRoomStore();
+    const { createUserHistory, addUserHistory } = useRoomStore();
+    const { messages } = useChatRoomStore();
+    const { user } = useUserStore();
+
+    useEffect(() => {
+        if (!messages.length) return;
+        const createMessages = messages.find(m=> m.messageType === "createUserHistory" && user.userId !== m.user );
+        
+        if (createMessages){
+            addUserHistory(JSON.parse(createMessages.message));
+        }
+
+    }, [messages])
 
     const onCloseModal = () => {
         closeModal()

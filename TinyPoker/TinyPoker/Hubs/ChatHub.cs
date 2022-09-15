@@ -18,7 +18,6 @@ namespace TinyPoker.Hubs
             if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
             {
                 _connections.Remove(Context.ConnectionId);
-                Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", $"{userConnection.User} has left");
                 SendUsersConnected(userConnection.Room);
             }
 
@@ -33,17 +32,10 @@ namespace TinyPoker.Hubs
                 _connections[Context.ConnectionId] = userConnection;
             }
 
-            //await Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", $"{userConnection.User} has joined {userConnection.Room}");
-            await Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", new
-            {
-                userConnection.User,
-                userConnection.UserName
-            });
-
             await SendUsersConnected(userConnection.Room);
         }
 
-        public async Task SendMessage(string message)
+        public async Task SendMessage(HubMessage message)
         {
             if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
             {

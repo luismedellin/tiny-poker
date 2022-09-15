@@ -28,7 +28,6 @@ export const NewRoomPage = () => {
               console.log(JSON.stringify(values, null, 2))
 
               setTimeout(async() => {
-                debugger;
                 const newRoom = await createRoom(values);
                 navigate(`/rooms/${newRoom.roomId}`);
               }, 100);

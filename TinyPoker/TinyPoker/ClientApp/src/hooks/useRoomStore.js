@@ -1,11 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoom, setCounter, setCurrentUserHistory, addUserHistory } from '../store';
+import { 
+    addRoom, 
+    setCounter, 
+    setCurrentUserHistory, 
+    onAddingUserHistory, 
+    onDeleteUserHistory 
+} from '../store';
 import { tinyPockerApi } from '../api';
+import { useChatRoomStore } from './';
 
 export const useRoomStore = () => {
     const dispatch = useDispatch();
 
     const { counter, room, currentUserHistory } = useSelector(state => state.room );
+    const { sendMessage } = useChatRoomStore();
     const { user } = useSelector(state => state.user );
 
     const addCounter = async () => {
@@ -43,16 +51,34 @@ export const useRoomStore = () => {
 
         try{
             const { data } = await tinyPockerApi.post('/userHistory', userHistory);
-            dispatch(addUserHistory(data));
-            return data;
+            addUserHistory(data);
+            sendMessage("createUserHistory", JSON.stringify(data));
         } catch (e) {
             
         }
     }
 
+    const deleteUserHistory = async(room, userHistoryId) => {
+        try{
+            await tinyPockerApi.delete(`/userHistory/${room}/${userHistoryId}`);
+            dispatch(onDeleteUserHistory(userHistoryId));
+            sendMessage("deleteUserHistory", JSON.stringify(userHistoryId));
+        } catch (e) {
+            
+        }
+    }
+
+    const addUserHistory = (userHistory) => {
+        dispatch(onAddingUserHistory(userHistory));
+    }
+
     const setUserHistory = (userHistory) => {
         dispatch(setCurrentUserHistory(userHistory));
         const us = room.userHistories.find(us => us.userHistoryId === userHistory.userHistoryId);
+    }
+
+    const removeUserHistory = (userHistoryId) => {
+        dispatch(onDeleteUserHistory(userHistoryId));
     }
 
     return {
@@ -66,5 +92,8 @@ export const useRoomStore = () => {
         
         setUserHistory,
         createUserHistory,
+        addUserHistory,
+        deleteUserHistory,
+        removeUserHistory
     }
 }

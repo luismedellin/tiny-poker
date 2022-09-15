@@ -67,10 +67,10 @@ export const RoomPage = () => {
 
     const [ cards, setCards ] = useState([...defaultCards])
 
-    const { room, currentUserHistory, getRoom, setUserHistory } = useRoomStore();
+    const { room, currentUserHistory, getRoom, setUserHistory, deleteUserHistory, removeUserHistory } = useRoomStore();
     const { users, joinRoom, sendMessage } = useChatRoomStore();
     const { user } = useUserStore();
-    
+    const { messages } = useChatRoomStore();
 
     useEffect(() => {
         const fetchRoom = async() => {
@@ -94,6 +94,16 @@ export const RoomPage = () => {
         if (room.roomId) joinRoom(user.userId, user.name, room.roomId);
     }, [room]);
 
+    useEffect(() => {
+        if (!messages.length) return;
+        const deleteMessages = messages.find(m=> m.messageType === "deleteUserHistory" && user.userId !== m.user);
+        
+        if (deleteMessages){
+            removeUserHistory(JSON.parse(deleteMessages.message));
+        }
+
+    }, [messages])
+
     const selectedCard = (index) => {
         const newCards = defaultCards.map((card, i)=> {
             if(i !== index) return card;
@@ -109,6 +119,18 @@ export const RoomPage = () => {
 
     const selectUserHistory = (userHistory) => {
         setUserHistory(userHistory);
+    }
+
+    const onDeleteUserHistory = (userHistoryId) => {
+        Swal.fire({
+            title: 'Está seguro de borrar esta historia de usuario?',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                deleteUserHistory(room.roomId, userHistoryId);
+            }
+          });
     }
 
     if (!room.roomId) return <p>Loading...</p>
@@ -139,6 +161,7 @@ export const RoomPage = () => {
                 <div>
                     <UserHistories
                         userHistories={ room.userHistories }
+                        deleteUserHistory = { onDeleteUserHistory }
                         onSelectUS = { selectUserHistory }
                         />
                 </div>
