@@ -3,7 +3,7 @@
     public class VoteDto
     {
         public string RoomId { get; set; }
-        public int UserStoryId { get; set; }
+        public string UserStoryId { get; set; }
         public string User { get; set; }
         public byte Points { get; set; }
     }

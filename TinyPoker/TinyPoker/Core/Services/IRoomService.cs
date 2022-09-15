@@ -8,12 +8,12 @@ namespace TinyPoker.Core.Services
         Task<Room> CreateRoom(RoomDto roomDto);
         Task<UserStory> CreateUserStory(UserStoryDto userStory);
         Task<Room?> GetRoom(string roomId);
-        Task<UserStory> GetUserStory(string roomId, int UserStoryId);
+        Task<UserStory> GetUserStory(string roomId, string UserStoryId);
         Task UpdateRoom(RoomDto roomDto);
         Task AddUser(UserDto userDto);
         Task UpdateUserStory(UserStoryDto userStoryDto);
         Task Vote(VoteDto voteDto);
-        Task DeleteUserStory(string roomId, int userStoryId);
+        Task DeleteUserStory(string roomId, string userStoryId);
         Task RemoveUser(string roomId, string userId);
     }
 }
